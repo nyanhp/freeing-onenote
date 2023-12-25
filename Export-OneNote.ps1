@@ -1,4 +1,4 @@
-﻿
+
 <#PSScriptInfo
 
 .VERSION 1.1.0
@@ -7,13 +7,11 @@
 
 .AUTHOR Jan-Hendrik Peters
 
-.PSEDITION Core, Desktop
-
 .COMPANYNAME Shiftavenue GmbH
 
 .COPYRIGHT Jan-Hendrik Peters, 2023
 
-.TAGS OneNote, Markdown, Graph
+.TAGS OneNote Markdown Graph
 
 .LICENSEURI https://raw.githubusercontent.com/nyanhp/freeing-onenote/main/LICENSE
 
@@ -21,9 +19,7 @@
 
 .ICONURI
 
-.EXTERNALMODULEDEPENDENCIES  MiniGraph, MarkdownPrince
-
-.REQUIREDMODULES MiniGraph, MarkdownPrince
+.EXTERNALMODULEDEPENDENCIES MiniGraph,MarkdownPrince 
 
 .REQUIREDSCRIPTS
 
@@ -34,7 +30,11 @@
 
 .PRIVATEDATA
 
-#>
+#> 
+
+#Requires -Module MiniGraph
+#Requires -Module MarkdownPrince
+
 
 <#
 .SYNOPSIS
@@ -101,8 +101,6 @@ param
     $Path
 )
 
-#requires -Module MiniGraph
-#requires -Module MarkdownPrince
 
 Connect-GraphDeviceCode -TenantId $TenantId -ClientId $OneNoteAppClientId
 Set-GraphEndpoint -Type beta
