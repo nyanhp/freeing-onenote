@@ -1,4 +1,4 @@
-
+﻿
 <#PSScriptInfo
 
 .VERSION 1.1.0
@@ -168,3 +168,4 @@ foreach ($book in $notebooks)
         }
     }
 }
+
