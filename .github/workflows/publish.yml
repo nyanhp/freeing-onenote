@@ -15,12 +15,12 @@ jobs:
     - uses: actions/checkout@v1
     - name: Install Prerequisites
       run: Install-Module -Name PSScriptAnalyzer, MiniGraph, MarkdownPrince -Force
-      shell: powershell
+      shell: pwsh
     - name: Validate
       run: Invoke-ScriptAnalyzer -Path . -Recurse -Fix -EnableExit -Severity Error,ParseError,Warning
-      shell: powershell
+      shell: pwsh
     - name: Build
       run: Publish-Script -Path ./Export-OneNote.ps1 -NuGetApiKey $env:APIKEY -Repo PSGallery
-      shell: powershell
+      shell: pwsh
       env:
         APIKEY: ${{ secrets.ApiKey }}
