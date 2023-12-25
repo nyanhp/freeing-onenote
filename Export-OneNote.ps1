@@ -1,15 +1,17 @@
 ﻿
 <#PSScriptInfo
 
-.VERSION 1.0
+.VERSION 1.1.0
 
 .GUID b9742b5d-5b71-4a08-bbfe-635827e34076
 
 .AUTHOR Jan-Hendrik Peters
 
+.PSEDITION Core, Desktop
+
 .COMPANYNAME Shiftavenue GmbH
 
-.COPYRIGHT
+.COPYRIGHT Jan-Hendrik Peters, 2023
 
 .TAGS OneNote, Markdown, Graph
 
@@ -20,6 +22,8 @@
 .ICONURI
 
 .EXTERNALMODULEDEPENDENCIES  MiniGraph, MarkdownPrince
+
+.REQUIREDMODULES MiniGraph, MarkdownPrince
 
 .REQUIREDSCRIPTS
 
