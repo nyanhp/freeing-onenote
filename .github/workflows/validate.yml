@@ -1,0 +1,15 @@
+on: [pull_request]
+
+jobs:
+  validate:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install Prerequisites
+      run: Install-Module -Name PSScriptAnalyzer, MiniGraph, MarkdownPrince -Force
+      shell: powershell
+    - name: Validate
+      run: Invoke-ScriptAnalyzer -Path . -Recurse -Fix -EnableExit -Severity Error,ParseError,Warning
+      shell: powershell
