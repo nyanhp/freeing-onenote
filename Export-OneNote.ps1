@@ -1,7 +1,7 @@
 ﻿
 <#PSScriptInfo
 
-.VERSION 1.1.0
+.VERSION 1.2.0
 
 .GUID b9742b5d-5b71-4a08-bbfe-635827e34076
 
@@ -71,7 +71,7 @@
 
 #>
 
-[CmdletBinding(DefaultParameterSetName = 'All')]
+[CmdletBinding(DefaultParameterSetName = 'Notebook')]
 param
 (
     [Parameter(ParameterSetName = 'Notebook')]
@@ -124,8 +124,11 @@ if (-not (Test-Path $Path))
 $mg = Get-Module -Name MiniGraph
 $token = & $mg { $script:token }
 
+Write-Verbose -Message "Exporting $($notebooks.count) notebooks to $Path"
+
 foreach ($book in $notebooks)
 {
+    Write-Verbose -Message "Exporting notebook $($book.displayName)"
     $bookPath = Join-Path -Path $Path -ChildPath $book.displayName
     $sections = Invoke-GraphRequest -Query "$($User)/onenote/notebooks/$($book.id)/sections"
     if (-not (Test-Path -Path $bookPath))
@@ -135,6 +138,7 @@ foreach ($book in $notebooks)
 
     foreach ($section in $sections)
     {
+        Write-Verbose -Message "Exporting section $($section.displayName)"
         $sectionPath = Join-Path -Path $bookPath -ChildPath $section.displayName
         if (-not (Test-Path -Path $sectionPath))
         {
@@ -144,7 +148,8 @@ foreach ($book in $notebooks)
 
         foreach ($page in $pages)
         {
-            $pagePath = Join-Path -Path $sectionPath -ChildPath "$($page.title).md"
+            Write-Verbose -Message "Exporting page $($page.title)"
+            $pagePath = Join-Path -Path $sectionPath -ChildPath "$($page.createdDateTime.ToString('yyyy-MM-dd'))_$($page.title).md"
             $content = Invoke-GraphRequest -Query "$($User)/onenote/pages/$($page.id)/content"
             $imgCount = 0
             foreach ($image in $content.SelectNodes("//img"))
