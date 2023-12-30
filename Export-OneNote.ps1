@@ -1,7 +1,7 @@
 ﻿
 <#PSScriptInfo
 
-.VERSION 1.2.0
+.VERSION 1.3.0
 
 .GUID b9742b5d-5b71-4a08-bbfe-635827e34076
 
@@ -149,7 +149,8 @@ foreach ($book in $notebooks)
         foreach ($page in $pages)
         {
             Write-Verbose -Message "Exporting page $($page.title)"
-            $pagePath = Join-Path -Path $sectionPath -ChildPath "$($page.createdDateTime.ToString('yyyy-MM-dd'))_$($page.title).md"
+            $sanitizedTitle = $page.title -replace '[\\\/\:\*\?\"\<\>\|]', '_'
+            $pagePath = Join-Path -Path $sectionPath -ChildPath "$($page.createdDateTime.ToString('yyyy-MM-dd'))_$($sanitizedTitle).md"
             $content = Invoke-GraphRequest -Query "$($User)/onenote/pages/$($page.id)/content"
             $imgCount = 0
             foreach ($image in $content.SelectNodes("//img"))
@@ -157,7 +158,7 @@ foreach ($book in $notebooks)
                 $header = @{
                     Authorization = "Bearer $token"
                 }
-                $imgName = '{0}_{1:d10}.png' -f $page.title, $imgCount
+                $imgName = '{0}_{1:d10}.png' -f $sanitizedTitle, $imgCount
                 $imgPath = Join-Path -Path $sectionPath -ChildPath resources
                 if (-not (Test-Path -Path $imgPath))
                 {
@@ -167,6 +168,7 @@ foreach ($book in $notebooks)
                 Invoke-RestMethod -Method Get -Uri $image.'data-fullres-src' -Headers $header -OutFile (Join-Path $imgPath $imgName)
 
                 $image.src = [uri]::EscapeUriString(('./resources/{1}' -f $section.displayName, $imgName))
+                $imgCount++
             }
 
             $content.OuterXml | ConvertFrom-HTMLToMarkdown -DestinationPath $pagePath -Format
